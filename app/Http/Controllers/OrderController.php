@@ -13,7 +13,7 @@ class OrderController extends Controller
     public function place(Request $request)
     {
         if (!Auth::check()) {
-            // return redirect()->route('login');
+            return redirect()->route('home');
         }
 
         $user_id = Auth::id();

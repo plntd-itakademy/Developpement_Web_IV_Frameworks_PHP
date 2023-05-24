@@ -24,3 +24,7 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
 Route::post('/orders/place', [OrderController::class, 'place'])->name('orders.place');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
