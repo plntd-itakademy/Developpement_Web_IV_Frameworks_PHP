@@ -13,7 +13,7 @@ class OrderController extends Controller
     public function place(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('home');
+            return redirect()->route('login');
         }
 
         $user_id = Auth::id();
@@ -37,10 +37,18 @@ class OrderController extends Controller
             'unit_price' => $product->price,
         ]);
 
-        return view('orders.summary', [
+        $products = $order->products;
+
+        $total_price = 0;
+        foreach ($order->products as $product) {
+            $total_price += $product->pivot->quantity * $product->pivot->unit_price;
+        }
+
+        return view('order.summary', [
             'order' => $order,
-            'product' => $product,
-            'user' => $user
+            'products' => $products,
+            'user' => $user,
+            'total_price' => $total_price
         ]);
     }
 }

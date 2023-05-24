@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,16 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');;
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
 Route::post('/orders/place', [OrderController::class, 'place'])->name('orders.place');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

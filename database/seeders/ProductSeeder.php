@@ -12,7 +12,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i < 9; $i++) {
+        for ($i = 1; $i < 10; $i++) {
             $price = mt_rand(5, 59) + 0.99;
 
             DB::table('products')->insert([
