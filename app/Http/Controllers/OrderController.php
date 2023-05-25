@@ -5,22 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function place(Request $request)
+    public function place()
     {
         $user_id = Auth::id();
         $user = User::find($user_id);
 
-        $quantity = $request->quantity;
-        $product_id = $request->product_id;
-        $product = Product::find($product_id);
+        $cart_items = session('cart', []);
 
-        if (!$product) {
-            return redirect()->route('products.index');
+        if (count($cart_items) === 0) {
+            return redirect()->route('cart.view');
         }
 
         $order = new Order([
@@ -28,21 +25,29 @@ class OrderController extends Controller
         ]);
         $order->save();
 
-        $order->products()->attach($product_id, [
-            'quantity' => $quantity,
-            'unit_price' => $product->price,
-        ]);
-
-        $products = $order->products;
-
         $total_price = 0;
-        foreach ($order->products as $product) {
-            $total_price += $product->pivot->quantity * $product->pivot->unit_price;
+
+        foreach ($cart_items as $item) {
+            $product = Product::find($item['product']->id);
+
+            if ($product) {
+                $quantity = $item['quantity'];
+                $unit_price = $product->price;
+
+                $order->products()->attach($product->id, [
+                    'quantity' => $quantity,
+                    'unit_price' => $unit_price,
+                ]);
+
+                $total_price += $quantity * $unit_price;
+            }
         }
+
+        session()->forget('cart');
 
         return view('order.summary', [
             'order' => $order,
-            'products' => $products,
+            'products' => $order->products,
             'user' => $user,
             'total_price' => $total_price
         ]);
