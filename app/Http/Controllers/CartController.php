@@ -31,23 +31,19 @@ class CartController extends Controller
             return redirect()->route('products.index');
         }
 
-        $cart_items = session('cart', []);
+        $cartItems = session('cart', []);
+        $itemIndex = $this->findCartItemIndex($cartItems, $product->id);
 
-        foreach ($cart_items as $key => $item) {
-            if ($item['product']->id === $product->id) {
-                $cart_items[$key]['quantity'] += $request->quantity;
-
-                session(['cart' => $cart_items]);
-                return redirect()->route('cart.view');
-            }
+        if ($itemIndex !== -1) {
+            $cartItems[$itemIndex]['quantity'] += $request->quantity;
+        } else {
+            $cartItems[] = [
+                'product' => $product,
+                'quantity' => $request->quantity
+            ];
         }
 
-        $cart_items[] = [
-            'product' => $product,
-            'quantity' => $request->quantity
-        ];
-
-        session(['cart' => $cart_items]);
+        session(['cart' => $cartItems]);
 
         return redirect()->route('cart.view');
     }
@@ -92,5 +88,16 @@ class CartController extends Controller
         session(['cart' => $cart_items]);
 
         return redirect()->route('cart.view');
+    }
+
+    private function findCartItemIndex($cartItems, $productId)
+    {
+        foreach ($cartItems as $index => $item) {
+            if ($item['product']->id === $productId) {
+                return $index;
+            }
+        }
+
+        return -1;
     }
 }
