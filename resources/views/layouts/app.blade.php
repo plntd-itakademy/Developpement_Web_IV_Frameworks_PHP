@@ -81,6 +81,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container">
+              <span class="text-muted">Mon entreprise - Tous droits réservés</span>
+              <a href="{{ route('policy') }}" class="text-muted ms-3">Politique de confidentialité</a>
+            </div>
+          </footer>
     </div>
 </body>
 </html>

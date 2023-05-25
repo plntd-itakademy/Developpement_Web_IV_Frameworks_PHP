@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/policy', function () {
+    return view('policy');
+})->name('policy');
 Auth::routes();
 
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
