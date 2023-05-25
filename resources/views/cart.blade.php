@@ -23,9 +23,9 @@
                         <td><a href="{{ route('products.show', ['id' => $item['product']['id']]) }}">{{ $item['product']['title'] }}</a></td>
                         <td>{{ $item['product']['price'] }}€</td>
                         <td>
-                            <form action="{{ route('cart.update', ['id' => $item['product']->id]) }}" method="GET">
+                            <form action="{{ route('cart.update', ['id' => $item['product']->id]) }}" method="GET" style="display: flex;">
                                 @csrf
-                                <input type="number" class="form-control" name="quantity" value="{{ $item['quantity'] }}" min="1" max="5">
+                                <input type="number" class="form-control" name="quantity" value="{{ $item['quantity'] }}" min="1" max="5" style="max-width: 50px; margin-right: 10px;">
                                 <button type="submit" class="btn btn-primary btn-sm">Modifier</button>
                             </form>
                         </td>
