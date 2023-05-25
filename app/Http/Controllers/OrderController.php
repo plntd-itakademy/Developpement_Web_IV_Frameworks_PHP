@@ -12,10 +12,6 @@ class OrderController extends Controller
 {
     public function place(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $user_id = Auth::id();
         $user = User::find($user_id);
 
